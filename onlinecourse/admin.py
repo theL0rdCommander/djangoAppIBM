@@ -1,6 +1,9 @@
+from pyexpat import model
+from attr import fields
 from django.contrib import admin
+from django.forms import inlineformset_factory
 # <HINT> Import any new Models here
-from .models import Course, Lesson, Instructor, Learner
+from .models import Choice, Course, Lesson, Instructor, Learner, Question
 
 # <HINT> Register QuestionInline and ChoiceInline classes here
 
@@ -22,9 +25,22 @@ class LessonAdmin(admin.ModelAdmin):
     list_display = ['title']
 
 
-# <HINT> Register Question and Choice models here
+class ChoiceInLine(admin.StackedInline):
+    model  = Choice
 
+
+class QuestionInLine(admin.TabularInline):
+    model = Question
+
+
+class QuestionAdmin(admin.ModelAdmin):
+    model = Question
+    inlines = [ChoiceInLine]
+
+# <HINT> Register Question and Choice models here
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Lesson, LessonAdmin)
 admin.site.register(Instructor)
 admin.site.register(Learner)
+admin.site.register(Question, QuestionAdmin)
+admin.site.register(Choice)
