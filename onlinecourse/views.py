@@ -1,7 +1,8 @@
+from click import Choice
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 # <HINT> Import any new Models here
-from .models import Course, Enrollment
+from .models import Course, Enrollment, Question, Choice
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
@@ -87,7 +88,15 @@ class CourseListView(generic.ListView):
 class CourseDetailView(generic.DetailView):
     model = Course
     template_name = 'onlinecourse/course_detail_bootstrap.html'
-
+    
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        id_ = self.kwargs.get("id") 
+        context['question_list'] = Question.objects.all()
+        context['choice_list'] = Choice.objects.all()
+        return context
 
 def enroll(request, course_id):
     course = get_object_or_404(Course, pk=course_id)

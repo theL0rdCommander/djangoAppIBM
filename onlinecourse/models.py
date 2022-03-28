@@ -98,7 +98,8 @@ class Enrollment(models.Model):
 
 #un poco de repaso en stackoverflow:
 #https://stackoverflow.com/questions/44022056/validators-minvaluevalidator-does-not-work-in-django
-    
+
+ 
 # <HINT> Create a Question Model with:
     # Used to persist question content for a course
     # Has a One-To-Many (or Many-To-Many if you want to reuse questions) relationship with course
