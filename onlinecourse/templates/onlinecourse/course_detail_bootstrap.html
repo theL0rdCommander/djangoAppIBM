@@ -14,7 +14,7 @@
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
             <div class="navbar-header">
-                  <a class="navbar-brand" href="{% url 'onlinecourse:index' %}">Home</a>
+                  <a class="navbar-brand" href="{% url 'onlinecourse:index' %}">Hogwarts Online</a>
             </div>
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
@@ -42,6 +42,7 @@
     <!-- Page content -->
     <div class="container-fluid">
         <h2>{{ course.name }}</h2>
+        <!--<h4>By Professor: <h4>-->
         <div class="card-columns-vertical">
             {% for lesson in course.lesson_set.all %}
                 <div class="card mt-1">

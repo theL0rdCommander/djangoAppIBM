@@ -55,7 +55,7 @@
                 {% for choice in question.choice_set.all %}
                 <div class="form-check">
                     {% if choice.is_correct and choice in choices %}
-                    <div class="text-success">Correct answer: {{ choice.content }}</div>
+                    <div class="text-success">Correct answer: { {choice.content} } absdasd asd</div>
                     {% else %}{% if choice.is_correct and not choice in choices %}
                     <div class="text-warning">Not selected: {{ choice.content }}</div>
                     {% else %}{% if not choice.is_correct and choice in choices %}

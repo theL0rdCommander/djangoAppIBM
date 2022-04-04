@@ -1,9 +1,10 @@
+from dis import Instruction
 from random import choices
 from click import Choice
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 # <HINT> Import any new Models here
-from .models import Course, Enrollment, Question, Choice, Submission
+from .models import Course, Enrollment, Instructor, Question, Choice, Submission
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
@@ -97,6 +98,7 @@ class CourseDetailView(generic.DetailView):
         id_ = self.kwargs.get("id") 
         context['question_list'] = Question.objects.all()
         context['choice_list'] = Choice.objects.all()
+        context['instructors'] = Instructor.objects.all()
         return context
 
 def enroll(request, course_id):
