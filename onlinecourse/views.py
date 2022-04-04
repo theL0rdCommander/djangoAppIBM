@@ -119,32 +119,38 @@ def submit(request, course_id):
     userP = request.user
     courseP = get_object_or_404(Course, pk=course_id)
     enrollmentP = Enrollment.objects.get(course=courseP, user=userP)
-    submissionP = Submission.objects.create(enrollment=enrollmentP)
-    answers = extract_answers(request=request)
-    submissionP.choices.set(answers)
-    submission_id= submissionP.id
+    submitted_choices = extract_answers(request)
+    
+    new_submission = Submission.objects.create(enrollment=enrollmentP)
+    new_submission.choices.set(submitted_choices)
+    submission_id = new_submission.pk
     return HttpResponseRedirect(reverse(viewname='onlinecourse:show_exam_result', args=(course_id, submission_id)))
 
 
 def extract_answers(request):
-    submitted_answers = []
+    submitted_anwsers = []
     for key in request.POST:
         if key.startswith('choice'):
-            choice_id = request.POST[key]
-            submitted_answers.append(Choice.objects.get(id=choice_id))
-    return submitted_answers
+            value = request.POST[key]
+            choice_id = int(value)
+            submitted_anwsers.append(choice_id)
+    print(submitted_anwsers)
+    return submitted_anwsers
 
 
 def show_exam_result(request, course_id, submission_id):
-    courseP = get_object_or_404(Course, pk=course_id)
-    submissionP = get_object_or_404(Submission, pk=submission_id)
-    submission_choices = submissionP.choices.all()
+    course = get_object_or_404(Course, pk=course_id)
+    submission = get_object_or_404(Submission, pk=submission_id)
+    sub_choices = submission.choices.all()
+    
     subtotal = 0
-    for choice in submission_choices:
-        if choice.is_correct:
-            subtotal += choice.question.grade
+    for s_choice in sub_choices:
+        if s_choice.is_correct:
+            subtotal += s_choice.question.grade
+    
     context = {}
-    context['course'] = courseP
+    context['course'] = course
     context['grade'] = subtotal
-    context['choices'] = submission_choices
+    context['choices'] = sub_choices
+    
     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
